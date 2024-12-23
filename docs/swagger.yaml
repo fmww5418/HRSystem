@@ -1,0 +1,897 @@
+definitions:
+  auth.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  auth.RegisterRequest:
+    properties:
+      password:
+        type: string
+      role:
+        $ref: '#/definitions/entity.Role'
+      username:
+        type: string
+    required:
+    - password
+    - role
+    - username
+    type: object
+  department.DepartmentCreateReq:
+    properties:
+      name:
+        type: string
+      organization_id:
+        type: integer
+    required:
+    - name
+    - organization_id
+    type: object
+  department.departmentResp:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      organization_id:
+        type: integer
+    type: object
+  employee.EmployeeRequest:
+    properties:
+      contact_info:
+        type: string
+      department_id:
+        type: integer
+      name:
+        type: string
+      position:
+        type: string
+      remained_day_off:
+        type: integer
+      salary:
+        type: number
+      supervisor_employee_id:
+        type: integer
+      user_id:
+        type: integer
+    required:
+    - contact_info
+    - name
+    - position
+    - remained_day_off
+    - salary
+    - user_id
+    type: object
+  employee.EmployeeResp:
+    properties:
+      contact_info:
+        type: string
+      department_id:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      position:
+        type: string
+      remained_day_off:
+        type: integer
+      salary:
+        type: number
+      supervisor_employee_id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  entity.Department:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      name:
+        type: string
+      organization:
+        $ref: '#/definitions/entity.Organization'
+      organizationID:
+        type: integer
+      updatedAt:
+        type: string
+    type: object
+  entity.Employee:
+    properties:
+      contactInfo:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      department:
+        $ref: '#/definitions/entity.Department'
+      departmentID:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      position:
+        type: string
+      remainedDayOff:
+        type: integer
+      salary:
+        type: number
+      supervisorEmployee:
+        $ref: '#/definitions/entity.Employee'
+      supervisorEmployeeID:
+        type: integer
+      updatedAt:
+        type: string
+      user:
+        $ref: '#/definitions/entity.User'
+      userID:
+        type: integer
+    type: object
+  entity.Organization:
+    properties:
+      admin:
+        $ref: '#/definitions/entity.User'
+      adminID:
+        type: integer
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  entity.Request:
+    properties:
+      createdAt:
+        type: string
+      description:
+        type: string
+      employee:
+        $ref: '#/definitions/entity.Employee'
+      employeeID:
+        type: integer
+      endDate:
+        type: string
+      id:
+        type: integer
+      startDate:
+        type: string
+      status:
+        $ref: '#/definitions/entity.RequestStatus'
+      updatedAt:
+        type: string
+    type: object
+  entity.RequestStatus:
+    enum:
+    - 0
+    - 1
+    - 2
+    - 3
+    type: integer
+    x-enum-varnames:
+    - RequestStatusPending
+    - RequestStatusAccepted
+    - RequestStatusRejected
+    - RequestStatusMax
+  entity.Role:
+    enum:
+    - 0
+    - 1
+    type: integer
+    x-enum-varnames:
+    - RoleAdmin
+    - RoleEmployee
+  entity.User:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      password:
+        type: string
+      role:
+        $ref: '#/definitions/entity.Role'
+      updatedAt:
+        type: string
+      username:
+        type: string
+    type: object
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  leave.LeaveRequestInput:
+    properties:
+      description:
+        type: string
+      end_date:
+        type: string
+      start_date:
+        type: string
+    required:
+    - end_date
+    - start_date
+    type: object
+  leave.LeaveRequestResp:
+    properties:
+      description:
+        type: string
+      employee_id:
+        type: integer
+      end_date:
+        type: string
+      id:
+        type: integer
+      start_date:
+        type: string
+      status:
+        $ref: '#/definitions/entity.RequestStatus'
+    type: object
+  leave.UpdateLeaveStatusInput:
+    properties:
+      status:
+        $ref: '#/definitions/entity.RequestStatus'
+    required:
+    - status
+    type: object
+  organization.OrganizationCreateReq:
+    properties:
+      admin_id:
+        type: integer
+      name:
+        type: string
+    required:
+    - admin_id
+    - name
+    type: object
+  organization.organizationResp:
+    properties:
+      admin_id:
+        type: integer
+      created_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login with username and password to receive a JWT token
+      parameters:
+      - description: Login request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/auth.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login successful, returns user ID and JWT token
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid input
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: User Login
+      tags:
+      - Authentication
+  /auth/logout:
+    post:
+      consumes:
+      - application/json
+      description: Logout by invalidating the JWT token from the server-side
+      parameters:
+      - description: 'Bearer token (Format: Bearer ''token'')'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Logout successful
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: User Logout
+      tags:
+      - Authentication
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user with username, password, and role
+      parameters:
+      - description: Registration request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/auth.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Registration successful
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid input
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: User Registration
+      tags:
+      - Authentication
+  /departments:
+    get:
+      description: Retrieve a list of all departments
+      parameters:
+      - description: 'Bearer token (Format: Bearer ''token'')'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of departments
+          schema:
+            items:
+              $ref: '#/definitions/department.departmentResp'
+            type: array
+        "500":
+          description: Failed to fetch departments
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get all departments
+      tags:
+      - Department
+    post:
+      consumes:
+      - application/json
+      description: Create a new department with the provided details
+      parameters:
+      - description: 'Bearer token (Format: Bearer ''token'')'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Department create request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/department.DepartmentCreateReq'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Department created successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid input
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to create department
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Create a new department
+      tags:
+      - Department
+  /employees:
+    get:
+      description: Retrieve a list of all employees
+      parameters:
+      - description: 'Bearer token (Format: Bearer ''token'')'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of employees
+          schema:
+            items:
+              $ref: '#/definitions/employee.EmployeeResp'
+            type: array
+        "500":
+          description: Failed to fetch employees
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get all employees
+      tags:
+      - Employee
+    post:
+      consumes:
+      - application/json
+      description: Create a new employee with the provided details
+      parameters:
+      - description: 'Bearer token (Format: Bearer ''token'')'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Employee create request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/employee.EmployeeRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Employee created successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid input
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to create employee
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Create a new employee
+      tags:
+      - Employee
+  /employees/{id}:
+    delete:
+      description: Delete an employee by their ID
+      parameters:
+      - description: 'Bearer token (Format: Bearer ''token'')'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Employee ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Employee deleted successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid employee ID
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to delete employee
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Delete an employee
+      tags:
+      - Employee
+    get:
+      description: Retrieve an employee by their ID
+      parameters:
+      - description: 'Bearer token (Format: Bearer ''token'')'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Employee ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Employee details
+          schema:
+            $ref: '#/definitions/employee.EmployeeResp'
+        "400":
+          description: Invalid employee ID
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Employee not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to fetch employee
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get employee by ID
+      tags:
+      - Employee
+    put:
+      consumes:
+      - application/json
+      description: Update an employee's details
+      parameters:
+      - description: Employee ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 'Bearer token (Format: Bearer ''token'')'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Employee update request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/employee.EmployeeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Employee updated successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid input
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to update employee
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Update an employee
+      tags:
+      - Employee
+  /leave_requests:
+    get:
+      description: Retrieve a list of all leave requests
+      parameters:
+      - description: 'Bearer token (Format: Bearer ''token'')'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of leave requests
+          schema:
+            items:
+              $ref: '#/definitions/leave.LeaveRequestResp'
+            type: array
+        "500":
+          description: Failed to fetch leave requests
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get all leave requests
+      tags:
+      - Leave
+    post:
+      consumes:
+      - application/json
+      description: Create a new leave request with the provided details
+      parameters:
+      - description: 'Bearer token (Format: Bearer ''token'')'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Leave request create request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/leave.LeaveRequestInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Leave request created successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid input
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to create leave request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Create a new leave request
+      tags:
+      - Leave
+  /leave_requests/{id}:
+    get:
+      description: Retrieve a leave request by its ID
+      parameters:
+      - description: 'Bearer token (Format: Bearer ''token'')'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Leave request ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Leave request details
+          schema:
+            $ref: '#/definitions/entity.Request'
+        "400":
+          description: Invalid leave request ID
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Leave request not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get leave request by ID
+      tags:
+      - Leave
+  /leave_requests/{id}/status:
+    put:
+      consumes:
+      - application/json
+      description: Update the status of a leave request
+      parameters:
+      - description: 'Bearer token (Format: Bearer ''token'')'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Leave request ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Leave request status update request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/leave.UpdateLeaveStatusInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Leave request status updated successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid input
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to update leave request status
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Update leave request status
+      tags:
+      - Leave
+  /organizations:
+    post:
+      consumes:
+      - application/json
+      description: Create a new organization with the provided details
+      parameters:
+      - description: 'Bearer token (Format: Bearer ''token'')'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Organization create request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/organization.OrganizationCreateReq'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Organization created successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid input
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to create organization
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Create a new organization
+      tags:
+      - Organization
+  /organizations/me:
+    get:
+      description: Retrieve an organization by myself
+      parameters:
+      - description: 'Bearer token (Format: Bearer ''token'')'
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Organization details
+          schema:
+            $ref: '#/definitions/organization.organizationResp'
+        "400":
+          description: Invalid organization ID
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Organization not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to fetch organization
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get organization by myself
+      tags:
+      - Organization
+swagger: "2.0"

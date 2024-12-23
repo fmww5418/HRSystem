@@ -1,0 +1,11 @@
+with-expecter: true
+issue-845-fix: true
+filename: "{{.InterfaceNameSnake}}_mock.go"
+dir: "{{.InterfaceDir}}/mocks"
+mockname: "Mock{{.InterfaceName}}"
+outpkg: "mocks"
+packages:
+  HRSystem/src/domain/:
+    config:
+      recursive: true
+      all: true
