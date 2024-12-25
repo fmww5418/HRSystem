@@ -22,17 +22,17 @@ func (_m *MockEmployeeUsecase) EXPECT() *MockEmployeeUsecase_Expecter {
 	return &MockEmployeeUsecase_Expecter{mock: &_m.Mock}
 }
 
-// CreateEmployee provides a mock function with given fields: req
-func (_m *MockEmployeeUsecase) CreateEmployee(req employee.EmployeeRequest) error {
-	ret := _m.Called(req)
+// CreateEmployee provides a mock function with given fields: operatorUserID, req
+func (_m *MockEmployeeUsecase) CreateEmployee(operatorUserID uint, req employee.EmployeeRequest) error {
+	ret := _m.Called(operatorUserID, req)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CreateEmployee")
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(employee.EmployeeRequest) error); ok {
-		r0 = rf(req)
+	if rf, ok := ret.Get(0).(func(uint, employee.EmployeeRequest) error); ok {
+		r0 = rf(operatorUserID, req)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -46,14 +46,15 @@ type MockEmployeeUsecase_CreateEmployee_Call struct {
 }
 
 // CreateEmployee is a helper method to define mock.On call
+//   - operatorUserID uint
 //   - req employee.EmployeeRequest
-func (_e *MockEmployeeUsecase_Expecter) CreateEmployee(req interface{}) *MockEmployeeUsecase_CreateEmployee_Call {
-	return &MockEmployeeUsecase_CreateEmployee_Call{Call: _e.mock.On("CreateEmployee", req)}
+func (_e *MockEmployeeUsecase_Expecter) CreateEmployee(operatorUserID interface{}, req interface{}) *MockEmployeeUsecase_CreateEmployee_Call {
+	return &MockEmployeeUsecase_CreateEmployee_Call{Call: _e.mock.On("CreateEmployee", operatorUserID, req)}
 }
 
-func (_c *MockEmployeeUsecase_CreateEmployee_Call) Run(run func(req employee.EmployeeRequest)) *MockEmployeeUsecase_CreateEmployee_Call {
+func (_c *MockEmployeeUsecase_CreateEmployee_Call) Run(run func(operatorUserID uint, req employee.EmployeeRequest)) *MockEmployeeUsecase_CreateEmployee_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(employee.EmployeeRequest))
+		run(args[0].(uint), args[1].(employee.EmployeeRequest))
 	})
 	return _c
 }
@@ -63,22 +64,22 @@ func (_c *MockEmployeeUsecase_CreateEmployee_Call) Return(_a0 error) *MockEmploy
 	return _c
 }
 
-func (_c *MockEmployeeUsecase_CreateEmployee_Call) RunAndReturn(run func(employee.EmployeeRequest) error) *MockEmployeeUsecase_CreateEmployee_Call {
+func (_c *MockEmployeeUsecase_CreateEmployee_Call) RunAndReturn(run func(uint, employee.EmployeeRequest) error) *MockEmployeeUsecase_CreateEmployee_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
-// DeleteEmployee provides a mock function with given fields: id
-func (_m *MockEmployeeUsecase) DeleteEmployee(id uint) error {
-	ret := _m.Called(id)
+// DeleteEmployee provides a mock function with given fields: operatorUserID, id
+func (_m *MockEmployeeUsecase) DeleteEmployee(operatorUserID uint, id uint) error {
+	ret := _m.Called(operatorUserID, id)
 
 	if len(ret) == 0 {
 		panic("no return value specified for DeleteEmployee")
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(uint) error); ok {
-		r0 = rf(id)
+	if rf, ok := ret.Get(0).(func(uint, uint) error); ok {
+		r0 = rf(operatorUserID, id)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -92,14 +93,15 @@ type MockEmployeeUsecase_DeleteEmployee_Call struct {
 }
 
 // DeleteEmployee is a helper method to define mock.On call
+//   - operatorUserID uint
 //   - id uint
-func (_e *MockEmployeeUsecase_Expecter) DeleteEmployee(id interface{}) *MockEmployeeUsecase_DeleteEmployee_Call {
-	return &MockEmployeeUsecase_DeleteEmployee_Call{Call: _e.mock.On("DeleteEmployee", id)}
+func (_e *MockEmployeeUsecase_Expecter) DeleteEmployee(operatorUserID interface{}, id interface{}) *MockEmployeeUsecase_DeleteEmployee_Call {
+	return &MockEmployeeUsecase_DeleteEmployee_Call{Call: _e.mock.On("DeleteEmployee", operatorUserID, id)}
 }
 
-func (_c *MockEmployeeUsecase_DeleteEmployee_Call) Run(run func(id uint)) *MockEmployeeUsecase_DeleteEmployee_Call {
+func (_c *MockEmployeeUsecase_DeleteEmployee_Call) Run(run func(operatorUserID uint, id uint)) *MockEmployeeUsecase_DeleteEmployee_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(uint))
+		run(args[0].(uint), args[1].(uint))
 	})
 	return _c
 }
@@ -109,14 +111,14 @@ func (_c *MockEmployeeUsecase_DeleteEmployee_Call) Return(_a0 error) *MockEmploy
 	return _c
 }
 
-func (_c *MockEmployeeUsecase_DeleteEmployee_Call) RunAndReturn(run func(uint) error) *MockEmployeeUsecase_DeleteEmployee_Call {
+func (_c *MockEmployeeUsecase_DeleteEmployee_Call) RunAndReturn(run func(uint, uint) error) *MockEmployeeUsecase_DeleteEmployee_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
-// GetAllEmployees provides a mock function with no fields
-func (_m *MockEmployeeUsecase) GetAllEmployees() ([]entity.Employee, error) {
-	ret := _m.Called()
+// GetAllEmployees provides a mock function with given fields: operatorUserID
+func (_m *MockEmployeeUsecase) GetAllEmployees(operatorUserID uint) ([]entity.Employee, error) {
+	ret := _m.Called(operatorUserID)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetAllEmployees")
@@ -124,19 +126,19 @@ func (_m *MockEmployeeUsecase) GetAllEmployees() ([]entity.Employee, error) {
 
 	var r0 []entity.Employee
 	var r1 error
-	if rf, ok := ret.Get(0).(func() ([]entity.Employee, error)); ok {
-		return rf()
+	if rf, ok := ret.Get(0).(func(uint) ([]entity.Employee, error)); ok {
+		return rf(operatorUserID)
 	}
-	if rf, ok := ret.Get(0).(func() []entity.Employee); ok {
-		r0 = rf()
+	if rf, ok := ret.Get(0).(func(uint) []entity.Employee); ok {
+		r0 = rf(operatorUserID)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]entity.Employee)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func() error); ok {
-		r1 = rf()
+	if rf, ok := ret.Get(1).(func(uint) error); ok {
+		r1 = rf(operatorUserID)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -150,13 +152,14 @@ type MockEmployeeUsecase_GetAllEmployees_Call struct {
 }
 
 // GetAllEmployees is a helper method to define mock.On call
-func (_e *MockEmployeeUsecase_Expecter) GetAllEmployees() *MockEmployeeUsecase_GetAllEmployees_Call {
-	return &MockEmployeeUsecase_GetAllEmployees_Call{Call: _e.mock.On("GetAllEmployees")}
+//   - operatorUserID uint
+func (_e *MockEmployeeUsecase_Expecter) GetAllEmployees(operatorUserID interface{}) *MockEmployeeUsecase_GetAllEmployees_Call {
+	return &MockEmployeeUsecase_GetAllEmployees_Call{Call: _e.mock.On("GetAllEmployees", operatorUserID)}
 }
 
-func (_c *MockEmployeeUsecase_GetAllEmployees_Call) Run(run func()) *MockEmployeeUsecase_GetAllEmployees_Call {
+func (_c *MockEmployeeUsecase_GetAllEmployees_Call) Run(run func(operatorUserID uint)) *MockEmployeeUsecase_GetAllEmployees_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run()
+		run(args[0].(uint))
 	})
 	return _c
 }
@@ -166,14 +169,14 @@ func (_c *MockEmployeeUsecase_GetAllEmployees_Call) Return(_a0 []entity.Employee
 	return _c
 }
 
-func (_c *MockEmployeeUsecase_GetAllEmployees_Call) RunAndReturn(run func() ([]entity.Employee, error)) *MockEmployeeUsecase_GetAllEmployees_Call {
+func (_c *MockEmployeeUsecase_GetAllEmployees_Call) RunAndReturn(run func(uint) ([]entity.Employee, error)) *MockEmployeeUsecase_GetAllEmployees_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
-// GetEmployeeByID provides a mock function with given fields: id
-func (_m *MockEmployeeUsecase) GetEmployeeByID(id uint) (entity.Employee, error) {
-	ret := _m.Called(id)
+// GetEmployeeByID provides a mock function with given fields: operatorUserID, id
+func (_m *MockEmployeeUsecase) GetEmployeeByID(operatorUserID uint, id uint) (entity.Employee, error) {
+	ret := _m.Called(operatorUserID, id)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetEmployeeByID")
@@ -181,17 +184,17 @@ func (_m *MockEmployeeUsecase) GetEmployeeByID(id uint) (entity.Employee, error)
 
 	var r0 entity.Employee
 	var r1 error
-	if rf, ok := ret.Get(0).(func(uint) (entity.Employee, error)); ok {
-		return rf(id)
+	if rf, ok := ret.Get(0).(func(uint, uint) (entity.Employee, error)); ok {
+		return rf(operatorUserID, id)
 	}
-	if rf, ok := ret.Get(0).(func(uint) entity.Employee); ok {
-		r0 = rf(id)
+	if rf, ok := ret.Get(0).(func(uint, uint) entity.Employee); ok {
+		r0 = rf(operatorUserID, id)
 	} else {
 		r0 = ret.Get(0).(entity.Employee)
 	}
 
-	if rf, ok := ret.Get(1).(func(uint) error); ok {
-		r1 = rf(id)
+	if rf, ok := ret.Get(1).(func(uint, uint) error); ok {
+		r1 = rf(operatorUserID, id)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -205,14 +208,15 @@ type MockEmployeeUsecase_GetEmployeeByID_Call struct {
 }
 
 // GetEmployeeByID is a helper method to define mock.On call
+//   - operatorUserID uint
 //   - id uint
-func (_e *MockEmployeeUsecase_Expecter) GetEmployeeByID(id interface{}) *MockEmployeeUsecase_GetEmployeeByID_Call {
-	return &MockEmployeeUsecase_GetEmployeeByID_Call{Call: _e.mock.On("GetEmployeeByID", id)}
+func (_e *MockEmployeeUsecase_Expecter) GetEmployeeByID(operatorUserID interface{}, id interface{}) *MockEmployeeUsecase_GetEmployeeByID_Call {
+	return &MockEmployeeUsecase_GetEmployeeByID_Call{Call: _e.mock.On("GetEmployeeByID", operatorUserID, id)}
 }
 
-func (_c *MockEmployeeUsecase_GetEmployeeByID_Call) Run(run func(id uint)) *MockEmployeeUsecase_GetEmployeeByID_Call {
+func (_c *MockEmployeeUsecase_GetEmployeeByID_Call) Run(run func(operatorUserID uint, id uint)) *MockEmployeeUsecase_GetEmployeeByID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(uint))
+		run(args[0].(uint), args[1].(uint))
 	})
 	return _c
 }
@@ -222,22 +226,22 @@ func (_c *MockEmployeeUsecase_GetEmployeeByID_Call) Return(_a0 entity.Employee, 
 	return _c
 }
 
-func (_c *MockEmployeeUsecase_GetEmployeeByID_Call) RunAndReturn(run func(uint) (entity.Employee, error)) *MockEmployeeUsecase_GetEmployeeByID_Call {
+func (_c *MockEmployeeUsecase_GetEmployeeByID_Call) RunAndReturn(run func(uint, uint) (entity.Employee, error)) *MockEmployeeUsecase_GetEmployeeByID_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
-// UpdateEmployee provides a mock function with given fields: id, req
-func (_m *MockEmployeeUsecase) UpdateEmployee(id uint, req employee.EmployeeRequest) error {
-	ret := _m.Called(id, req)
+// UpdateEmployee provides a mock function with given fields: operatorUserID, id, req
+func (_m *MockEmployeeUsecase) UpdateEmployee(operatorUserID uint, id uint, req employee.EmployeeRequest) error {
+	ret := _m.Called(operatorUserID, id, req)
 
 	if len(ret) == 0 {
 		panic("no return value specified for UpdateEmployee")
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(uint, employee.EmployeeRequest) error); ok {
-		r0 = rf(id, req)
+	if rf, ok := ret.Get(0).(func(uint, uint, employee.EmployeeRequest) error); ok {
+		r0 = rf(operatorUserID, id, req)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -251,15 +255,16 @@ type MockEmployeeUsecase_UpdateEmployee_Call struct {
 }
 
 // UpdateEmployee is a helper method to define mock.On call
+//   - operatorUserID uint
 //   - id uint
 //   - req employee.EmployeeRequest
-func (_e *MockEmployeeUsecase_Expecter) UpdateEmployee(id interface{}, req interface{}) *MockEmployeeUsecase_UpdateEmployee_Call {
-	return &MockEmployeeUsecase_UpdateEmployee_Call{Call: _e.mock.On("UpdateEmployee", id, req)}
+func (_e *MockEmployeeUsecase_Expecter) UpdateEmployee(operatorUserID interface{}, id interface{}, req interface{}) *MockEmployeeUsecase_UpdateEmployee_Call {
+	return &MockEmployeeUsecase_UpdateEmployee_Call{Call: _e.mock.On("UpdateEmployee", operatorUserID, id, req)}
 }
 
-func (_c *MockEmployeeUsecase_UpdateEmployee_Call) Run(run func(id uint, req employee.EmployeeRequest)) *MockEmployeeUsecase_UpdateEmployee_Call {
+func (_c *MockEmployeeUsecase_UpdateEmployee_Call) Run(run func(operatorUserID uint, id uint, req employee.EmployeeRequest)) *MockEmployeeUsecase_UpdateEmployee_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(uint), args[1].(employee.EmployeeRequest))
+		run(args[0].(uint), args[1].(uint), args[2].(employee.EmployeeRequest))
 	})
 	return _c
 }
@@ -269,7 +274,7 @@ func (_c *MockEmployeeUsecase_UpdateEmployee_Call) Return(_a0 error) *MockEmploy
 	return _c
 }
 
-func (_c *MockEmployeeUsecase_UpdateEmployee_Call) RunAndReturn(run func(uint, employee.EmployeeRequest) error) *MockEmployeeUsecase_UpdateEmployee_Call {
+func (_c *MockEmployeeUsecase_UpdateEmployee_Call) RunAndReturn(run func(uint, uint, employee.EmployeeRequest) error) *MockEmployeeUsecase_UpdateEmployee_Call {
 	_c.Call.Return(run)
 	return _c
 }

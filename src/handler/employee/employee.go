@@ -1,6 +1,8 @@
 package employee
 
 import (
+	"errors"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"net/http"
@@ -42,7 +44,14 @@ func NewEmployeeHandler(usecase demployee.EmployeeUsecase) *EmployeeHandler {
 // @Router /employees [get]
 // @Security ApiKeyAuth
 func (h *EmployeeHandler) GetAllEmployees(c *gin.Context) {
-	employees, err := h.usecase.GetAllEmployees()
+	userID := c.GetString("user_id")
+	operatorUserID, err := strconv.Atoi(userID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid employee ID"})
+		return
+	}
+
+	employees, err := h.usecase.GetAllEmployees(uint(operatorUserID))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch employees"})
 		return
@@ -86,12 +95,19 @@ func (h *EmployeeHandler) GetEmployeeByID(c *gin.Context) {
 		return
 	}
 
-	employee, err := h.usecase.GetEmployeeByID(uint(id))
+	userID := c.GetString("user_id")
+	operatorUserID, err := strconv.Atoi(userID)
 	if err != nil {
-		if err == gorm.ErrRecordNotFound {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid employee ID"})
+		return
+	}
+
+	employee, err := h.usecase.GetEmployeeByID(uint(operatorUserID), uint(id))
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			c.JSON(http.StatusNotFound, gin.H{"error": "Employee not found"})
 		} else {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch employee"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintf("Failed to fetch employee. error: %v", err)})
 		}
 		return
 	}
@@ -129,7 +145,14 @@ func (h *EmployeeHandler) CreateEmployee(c *gin.Context) {
 		return
 	}
 
-	if err := h.usecase.CreateEmployee(req); err != nil {
+	userID := c.GetString("user_id")
+	operatorUserID, err := strconv.Atoi(userID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid employee ID"})
+		return
+	}
+
+	if err := h.usecase.CreateEmployee(uint(operatorUserID), req); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create employee"})
 		return
 	}
@@ -164,8 +187,15 @@ func (h *EmployeeHandler) UpdateEmployee(c *gin.Context) {
 		return
 	}
 
-	if err := h.usecase.UpdateEmployee(uint(id), req); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update employee"})
+	userID := c.GetString("user_id")
+	operatorUserID, err := strconv.Atoi(userID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid employee ID"})
+		return
+	}
+
+	if err := h.usecase.UpdateEmployee(uint(operatorUserID), uint(id), req); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("Failed to update employee. error: %v", err)})
 		return
 	}
 
@@ -191,7 +221,14 @@ func (h *EmployeeHandler) DeleteEmployee(c *gin.Context) {
 		return
 	}
 
-	if err := h.usecase.DeleteEmployee(uint(id)); err != nil {
+	userID := c.GetString("user_id")
+	operatorUserID, err := strconv.Atoi(userID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid employee ID"})
+		return
+	}
+
+	if err := h.usecase.DeleteEmployee(uint(operatorUserID), uint(id)); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete employee"})
 		return
 	}

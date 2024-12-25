@@ -162,29 +162,29 @@ func (_c *MockEmployeeRepository_Delete_Call) RunAndReturn(run func(uint) error)
 	return _c
 }
 
-// FindAll provides a mock function with no fields
-func (_m *MockEmployeeRepository) FindAll() ([]entity.Employee, error) {
-	ret := _m.Called()
+// FindAllByUserID provides a mock function with given fields: operatorUserID
+func (_m *MockEmployeeRepository) FindAllByUserID(operatorUserID uint) ([]entity.Employee, error) {
+	ret := _m.Called(operatorUserID)
 
 	if len(ret) == 0 {
-		panic("no return value specified for FindAll")
+		panic("no return value specified for FindAllByUserID")
 	}
 
 	var r0 []entity.Employee
 	var r1 error
-	if rf, ok := ret.Get(0).(func() ([]entity.Employee, error)); ok {
-		return rf()
+	if rf, ok := ret.Get(0).(func(uint) ([]entity.Employee, error)); ok {
+		return rf(operatorUserID)
 	}
-	if rf, ok := ret.Get(0).(func() []entity.Employee); ok {
-		r0 = rf()
+	if rf, ok := ret.Get(0).(func(uint) []entity.Employee); ok {
+		r0 = rf(operatorUserID)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]entity.Employee)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func() error); ok {
-		r1 = rf()
+	if rf, ok := ret.Get(1).(func(uint) error); ok {
+		r1 = rf(operatorUserID)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -192,29 +192,30 @@ func (_m *MockEmployeeRepository) FindAll() ([]entity.Employee, error) {
 	return r0, r1
 }
 
-// MockEmployeeRepository_FindAll_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindAll'
-type MockEmployeeRepository_FindAll_Call struct {
+// MockEmployeeRepository_FindAllByUserID_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindAllByUserID'
+type MockEmployeeRepository_FindAllByUserID_Call struct {
 	*mock.Call
 }
 
-// FindAll is a helper method to define mock.On call
-func (_e *MockEmployeeRepository_Expecter) FindAll() *MockEmployeeRepository_FindAll_Call {
-	return &MockEmployeeRepository_FindAll_Call{Call: _e.mock.On("FindAll")}
+// FindAllByUserID is a helper method to define mock.On call
+//   - operatorUserID uint
+func (_e *MockEmployeeRepository_Expecter) FindAllByUserID(operatorUserID interface{}) *MockEmployeeRepository_FindAllByUserID_Call {
+	return &MockEmployeeRepository_FindAllByUserID_Call{Call: _e.mock.On("FindAllByUserID", operatorUserID)}
 }
 
-func (_c *MockEmployeeRepository_FindAll_Call) Run(run func()) *MockEmployeeRepository_FindAll_Call {
+func (_c *MockEmployeeRepository_FindAllByUserID_Call) Run(run func(operatorUserID uint)) *MockEmployeeRepository_FindAllByUserID_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run()
+		run(args[0].(uint))
 	})
 	return _c
 }
 
-func (_c *MockEmployeeRepository_FindAll_Call) Return(_a0 []entity.Employee, _a1 error) *MockEmployeeRepository_FindAll_Call {
+func (_c *MockEmployeeRepository_FindAllByUserID_Call) Return(_a0 []entity.Employee, _a1 error) *MockEmployeeRepository_FindAllByUserID_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockEmployeeRepository_FindAll_Call) RunAndReturn(run func() ([]entity.Employee, error)) *MockEmployeeRepository_FindAll_Call {
+func (_c *MockEmployeeRepository_FindAllByUserID_Call) RunAndReturn(run func(uint) ([]entity.Employee, error)) *MockEmployeeRepository_FindAllByUserID_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -271,6 +272,63 @@ func (_c *MockEmployeeRepository_FindByID_Call) Return(_a0 entity.Employee, _a1 
 }
 
 func (_c *MockEmployeeRepository_FindByID_Call) RunAndReturn(run func(uint) (entity.Employee, error)) *MockEmployeeRepository_FindByID_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// FindByIDWithOrgCheck provides a mock function with given fields: userID, id
+func (_m *MockEmployeeRepository) FindByIDWithOrgCheck(userID uint, id uint) (entity.Employee, error) {
+	ret := _m.Called(userID, id)
+
+	if len(ret) == 0 {
+		panic("no return value specified for FindByIDWithOrgCheck")
+	}
+
+	var r0 entity.Employee
+	var r1 error
+	if rf, ok := ret.Get(0).(func(uint, uint) (entity.Employee, error)); ok {
+		return rf(userID, id)
+	}
+	if rf, ok := ret.Get(0).(func(uint, uint) entity.Employee); ok {
+		r0 = rf(userID, id)
+	} else {
+		r0 = ret.Get(0).(entity.Employee)
+	}
+
+	if rf, ok := ret.Get(1).(func(uint, uint) error); ok {
+		r1 = rf(userID, id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockEmployeeRepository_FindByIDWithOrgCheck_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindByIDWithOrgCheck'
+type MockEmployeeRepository_FindByIDWithOrgCheck_Call struct {
+	*mock.Call
+}
+
+// FindByIDWithOrgCheck is a helper method to define mock.On call
+//   - userID uint
+//   - id uint
+func (_e *MockEmployeeRepository_Expecter) FindByIDWithOrgCheck(userID interface{}, id interface{}) *MockEmployeeRepository_FindByIDWithOrgCheck_Call {
+	return &MockEmployeeRepository_FindByIDWithOrgCheck_Call{Call: _e.mock.On("FindByIDWithOrgCheck", userID, id)}
+}
+
+func (_c *MockEmployeeRepository_FindByIDWithOrgCheck_Call) Run(run func(userID uint, id uint)) *MockEmployeeRepository_FindByIDWithOrgCheck_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(uint), args[1].(uint))
+	})
+	return _c
+}
+
+func (_c *MockEmployeeRepository_FindByIDWithOrgCheck_Call) Return(_a0 entity.Employee, _a1 error) *MockEmployeeRepository_FindByIDWithOrgCheck_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockEmployeeRepository_FindByIDWithOrgCheck_Call) RunAndReturn(run func(uint, uint) (entity.Employee, error)) *MockEmployeeRepository_FindByIDWithOrgCheck_Call {
 	_c.Call.Return(run)
 	return _c
 }

@@ -7,8 +7,9 @@ import (
 
 type (
 	EmployeeRepository interface {
-		FindAll() ([]entity.Employee, error)
+		FindAllByUserID(operatorUserID uint) ([]entity.Employee, error)
 		FindByID(id uint) (entity.Employee, error)
+		FindByIDWithOrgCheck(userID uint, id uint) (entity.Employee, error)
 		FindByUserID(id uint) (entity.Employee, error)
 		Create(employee entity.Employee) error
 		Update(id uint, employee entity.Employee) error
@@ -18,21 +19,21 @@ type (
 	}
 
 	EmployeeUsecase interface {
-		GetAllEmployees() ([]entity.Employee, error)
-		GetEmployeeByID(id uint) (entity.Employee, error)
-		CreateEmployee(req EmployeeRequest) error
-		UpdateEmployee(id uint, req EmployeeRequest) error
-		DeleteEmployee(id uint) error
+		GetAllEmployees(operatorUserID uint) ([]entity.Employee, error)
+		GetEmployeeByID(operatorUserID uint, id uint) (entity.Employee, error)
+		CreateEmployee(operatorUserID uint, req EmployeeRequest) error
+		UpdateEmployee(operatorUserID uint, id uint, req EmployeeRequest) error
+		DeleteEmployee(operatorUserID uint, id uint) error
 	}
 )
 
 type EmployeeRequest struct {
-	Name                 string  `json:"name" binding:"required"`
-	Position             string  `json:"position" binding:"required"`
-	ContactInfo          string  `json:"contact_info" binding:"required"`
-	UserID               uint    `json:"user_id" binding:"required"`
-	Salary               float64 `json:"salary" binding:"required"`
-	DepartmentID         *uint   `json:"department_id" `
-	SupervisorEmployeeID *uint   `json:"supervisor_employee_id"`
-	RemainedDayOff       *int    `json:"remained_day_off" binding:"required"`
+	Name                 string   `json:"name" binding:"required"`
+	Position             string   `json:"position" binding:"required"`
+	ContactInfo          string   `json:"contact_info" binding:"required"`
+	UserID               uint     `json:"user_id" binding:"required"`
+	Salary               *float64 `json:"salary" binding:"required"`
+	DepartmentID         *uint    `json:"department_id" `
+	SupervisorEmployeeID *uint    `json:"supervisor_employee_id"`
+	RemainedDayOff       *int     `json:"remained_day_off" binding:"required"`
 }

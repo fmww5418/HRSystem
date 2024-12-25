@@ -1,6 +1,7 @@
 package employee
 
 import (
+	"fmt"
 	"gorm.io/gorm"
 
 	demployee "HRSystem/src/domain/employee"
@@ -17,9 +18,26 @@ func NewEmployeeRepository(db *gorm.DB) demployee.EmployeeRepository {
 	return &employeeRepository{db: db}
 }
 
-func (r *employeeRepository) FindAll() ([]entity.Employee, error) {
+func (r *employeeRepository) FindAllByUserID(operatorUserID uint) ([]entity.Employee, error) {
 	var employees []entity.Employee
-	err := r.db.Find(&employees).Error
+	var operator entity.Employee
+
+	if err := r.db.Preload("Department").
+		Where("user_id = ?", operatorUserID).First(&operator).Error; err != nil {
+		return employees, err
+	}
+
+	if operator.Department == nil {
+		return employees, fmt.Errorf("can't find employees")
+	}
+
+	err := r.db.Model(&entity.Organization{}).
+		Select("employees.*").
+		Joins("INNER JOIN departments ON departments.organization_id = organizations.id").
+		Joins("INNER JOIN employees ON employees.department_id = departments.id").
+		Where("organizations.id = ? AND employees.deleted_at IS NULL AND departments.deleted_at IS NULL", operator.Department.OrganizationID).
+		Find(&employees).Error
+
 	return employees, err
 }
 
@@ -31,6 +49,26 @@ func (r *employeeRepository) FindByID(id uint) (entity.Employee, error) {
 		Preload("Department.Organization").
 		First(&employee, id).Error
 	return employee, err
+}
+
+func (r *employeeRepository) FindByIDWithOrgCheck(operatorUserID uint, id uint) (entity.Employee, error) {
+	operator, err := r.FindByUserID(operatorUserID)
+	if err != nil {
+		return entity.Employee{}, err
+	}
+
+	employeeUser, err := r.FindByID(id)
+	if err != nil {
+		return entity.Employee{}, err
+	}
+
+	if employeeUser.Department == nil ||
+		operator.Department == nil ||
+		employeeUser.Department.OrganizationID != operator.Department.OrganizationID {
+		return entity.Employee{}, fmt.Errorf("you are not allowed to operate an employee with an outside organization")
+	}
+
+	return employeeUser, nil
 }
 
 func (r *employeeRepository) FindByUserID(userID uint) (entity.Employee, error) {
