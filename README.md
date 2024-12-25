@@ -22,9 +22,9 @@ Below are some commonly used Makefile commands and their purposes:
 - `make run`: Run the main program.
 - `make clean`: Clean up build output files.
 - `make mockery`: Generate mock files.
-   - Ensure you have installed mockery by execute `go install github.com/vektra/mockery/v2@v2.50.1` before running it
+   - Ensure you have installed mockery by executing `go install github.com/vektra/mockery/v2@v2.50.1` before running it
 - `make swagger`: Update and generate swagger files.
-   - Ensure you have installed swag by execute `go install github.com/swaggo/swag/cmd/swag@v1.16.3 && swag -v` before running it  
+   - Ensure you have installed swag by executing `go install github.com/swaggo/swag/cmd/swag@v1.16.3 && swag -v` before running it  
 
 ## Deployment
 
@@ -48,6 +48,9 @@ The following environment variables are defined in `docker-compose.yml`:
 Please ensure these variables are set in the `.env` file.
 
 ## Notes
+
+1. For newly registered accounts that have not joined an organization, please use the Create Organization API to establish an organization. Otherwise, there will be no data in the department or employee sections.
+2. The token required for API calls can be obtained after logging in and should be used in the authorization header in the format "Bearer ${token}".
 
 - Please ensure MySQL and Redis are correctly configured in the local environment.
 - Before performing database migration or seeding operations, ensure the database connection is normal.
