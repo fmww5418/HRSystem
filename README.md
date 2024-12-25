@@ -15,13 +15,16 @@ Below are some commonly used Makefile commands and their purposes:
 
 - `make docker-up`: Start all Docker containers.
 - `make docker-down`: Stop all Docker containers.
-- `make migrate`: Execute database model auto migration.
+- `make migrate`: Generate database auto migration files.
+   - Ensure you have installed https://github.com/ariga/atlas before running it
 - `make seed`: Execute database seeding.
 - `make test`: Run unit tests.
 - `make run`: Run the main program.
 - `make clean`: Clean up build output files.
 - `make mockery`: Generate mock files.
+   - Ensure you have installed mockery by execute `go install github.com/vektra/mockery/v2@v2.50.1` before running it
 - `make swagger`: Update and generate swagger files.
+   - Ensure you have installed swag by execute `go install github.com/swaggo/swag/cmd/swag@v1.16.3 && swag -v` before running it  
 
 ## Deployment
 
